@@ -295,7 +295,7 @@ class GLSLGenerator : public Generator
         /* ----- BufferDecl ----- */
 
         void WriteBufferDecl(BufferDecl* bufferDecl);
-        void WriteBufferDeclTexture(BufferDecl* bufferDecl);
+        void WriteBufferDeclTexture(BufferDecl* bufferDecl, bool inStruct = false);
         void WriteBufferDeclStorageBuffer(BufferDecl* bufferDecl);
 
         /* ----- SamplerDecl ----- */

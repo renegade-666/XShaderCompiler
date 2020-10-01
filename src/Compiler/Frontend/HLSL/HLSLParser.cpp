@@ -671,6 +671,16 @@ StructDeclPtr HLSLParser::ParseStructDecl(bool parseStructTkn, const TokenPtr& i
                 else
                     Error(R_IllegalDeclStmntInsideDeclOf(ast->ToString()), stmnt->area, false);
             }
+            else if (auto samplerDeclStmnt = stmnt->As<SamplerDeclStmnt>())
+            {
+                /* Store copy in member sampler list */
+                ast->samplerMembers = samplerDeclStmnt->samplerDecls;
+            }
+            else if (auto bufferDeclStmnt = stmnt->As<BufferDeclStmnt>())
+            {
+                /* Store copy in member buffer list */
+                ast->bufferMembers = bufferDeclStmnt->bufferDecls;
+            }
             else
                 Error(R_IllegalDeclStmntInsideDeclOf(ast->ToString()), stmnt->area, false);
         }

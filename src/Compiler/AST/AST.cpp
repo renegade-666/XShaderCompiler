@@ -717,6 +717,54 @@ VarDecl* StructDecl::FetchVarDecl(const std::string& ident, const StructDecl** o
     return nullptr;
 }
 
+// Returns the SamplerDecl AST node inside this struct decl for the specified identifier, or null if there is no such VarDecl.
+SamplerDecl* StructDecl::FetchSamplerDecl(const std::string& ident, const StructDecl** owner) const
+{
+    /* Fetch symbol from samplers first */
+    for (const auto& samplerDeclStmnt : samplerMembers)
+    {
+        if (samplerDeclStmnt->ident == ident)
+        {
+            if (owner)
+                *owner = this;
+            return samplerDeclStmnt.get();
+        }
+    }
+
+    /* Now fetch symbol from base struct */
+    if (baseStructRef)
+    {
+        if (auto symbol = baseStructRef->FetchSamplerDecl(ident, owner))
+            return symbol;
+    }
+
+    return nullptr;
+}
+
+// Returns the BufferDecl AST node inside this struct decl for the specified identifier, or null if there is no such VarDecl.
+BufferDecl* StructDecl::FetchBufferDecl(const std::string& ident, const StructDecl** owner) const
+{
+    /* Fetch symbol from samplers first */
+    for (const auto& bufferDeclStmnt : bufferMembers)
+    {
+        if (bufferDeclStmnt->ident == ident)
+        {
+            if (owner)
+                *owner = this;
+            return bufferDeclStmnt.get();
+        }
+    }
+
+    /* Now fetch symbol from base struct */
+    if (baseStructRef)
+    {
+        if (auto symbol = baseStructRef->FetchBufferDecl(ident, owner))
+            return symbol;
+    }
+
+    return nullptr;
+}
+
 VarDecl* StructDecl::FetchBaseMember() const
 {
     if (!varMembers.empty() && varMembers.front()->flags(VarDeclStmnt::isBaseMember))

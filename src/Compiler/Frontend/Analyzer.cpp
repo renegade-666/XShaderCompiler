@@ -285,12 +285,16 @@ FunctionDecl* Analyzer::FetchFunctionDecl(const std::string& ident, const AST* a
     return nullptr;
 }
 
-VarDecl* Analyzer::FetchVarDeclFromStruct(const StructTypeDenoter& structTypeDenoter, const std::string& ident, const AST* ast)
+Decl* Analyzer::FetchDeclFromStruct(const StructTypeDenoter& structTypeDenoter, const std::string& ident, const AST* ast)
 {
     if (auto structDecl = structTypeDenoter.structDeclRef)
     {
         if (auto symbol = structDecl->FetchVarDecl(ident))
             return symbol;
+		else if (auto samplerSymbol = structDecl->FetchSamplerDecl(ident))
+            return samplerSymbol;
+        else if (auto bufferSymbol = structDecl->FetchBufferDecl(ident))
+            return bufferSymbol;
         else
             ErrorUndeclaredIdent(ident, structDecl->ToString(), structDecl->FetchSimilar(ident), ast);
     }

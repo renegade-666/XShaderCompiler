@@ -3189,6 +3189,13 @@ bool GLSLGenerator::WriteStructDecl(StructDecl* structDecl, bool endWithSemicolo
     {
         WriteStmntList(structDecl->varMembers);
     }
+	/* Write structure buffers */
+    {
+        for (const auto& bufferDecl : structDecl->bufferMembers)
+        {
+            WriteBufferDeclTexture(bufferDecl.get(), true);
+        }
+    }
     EndSep();
     WriteScopeClose();
 
@@ -3222,7 +3229,7 @@ void GLSLGenerator::WriteBufferDecl(BufferDecl* bufferDecl)
     }
 }
 
-void GLSLGenerator::WriteBufferDeclTexture(BufferDecl* bufferDecl)
+void GLSLGenerator::WriteBufferDeclTexture(BufferDecl* bufferDecl, bool inStruct)
 {
     const std::string* bufferTypeKeyword = nullptr;
 
@@ -3297,7 +3304,8 @@ void GLSLGenerator::WriteBufferDeclTexture(BufferDecl* bufferDecl)
         if (isRWBuffer && (isWriteOnly || imageLayoutFormat == ImageLayoutFormat::Undefined))
             Write("writeonly ");
 
-        Write("uniform ");
+        if (!inStruct)
+            Write("uniform ");
 
         /* Write sampler type and identifier */
         if (auto genericTypeDen = bufferDecl->declStmntRef->typeDenoter->genericTypeDenoter)

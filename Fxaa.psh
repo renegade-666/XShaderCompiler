@@ -1,0 +1,33 @@
+#include "xcompile.hlsli"
+#include "Fxaa3_11.h"
+
+struct Input
+{
+	float4 Position: SV_POSITION;
+	float2 TexCoord : TEXCOORD0;
+};
+
+CONSTANTS_START(1)
+CONSTANT_DECL(float4, InvResolution, 0);
+CONSTANT_DECL(float4, QualitySettings, 1);
+CONSTANTS_END
+
+TEX_DEFINE(FrameTexture, 0);
+
+float4 main(Input input) : SV_TARGET
+{
+	FXAA_ARG(FrameTexture);
+
+	float4 output = FxaaPixelShader(
+		input.TexCoord,
+		FrameTexture,
+		InvResolution.xy,
+		QualitySettings.x,
+		QualitySettings.y,
+		QualitySettings.z
+	);
+
+	output.a = 1.0f;
+	return output;
+}
+

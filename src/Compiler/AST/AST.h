@@ -678,6 +678,12 @@ struct StructDecl : public Decl
     // Returns the VarDecl AST node inside this struct decl for the specified identifier, or null if there is no such VarDecl.
     VarDecl* FetchVarDecl(const std::string& ident, const StructDecl** owner = nullptr) const;
 
+    // Returns the SamplerDecl AST node inside this struct decl for the specified identifier, or null if there is no such VarDecl.
+    SamplerDecl* FetchSamplerDecl(const std::string& ident, const StructDecl** owner = nullptr) const;
+
+    // Returns the BufferDecl AST node inside this struct decl for the specified identifier, or null if there is no such VarDecl.
+    BufferDecl* FetchBufferDecl(const std::string& ident, const StructDecl** owner = nullptr) const;
+
     // Returns the VarDecl AST node of the 'base' member variable, or null if there is no such VarDecl.
     VarDecl* FetchBaseMember() const;
 
@@ -744,6 +750,8 @@ struct StructDecl : public Decl
     //TODO: maybe replace "VarDeclStmntPtr" by "VarDeclPtr" here.
     std::vector<VarDeclStmntPtr>    varMembers;                         // List of all member variable declaration statements.
     std::vector<FunctionDeclPtr>    funcMembers;                        // List of all member function declarations.
+    std::vector<SamplerDeclPtr>     samplerMembers;                     // List of all member samplers declarations.
+    std::vector<BufferDeclPtr>      bufferMembers;                      // List of all member buffers declarations.
 
     BasicDeclStmnt*                 declStmntRef            = nullptr;  // Reference to its declaration statement (parent node).
     StructDecl*                     baseStructRef           = nullptr;  // Optional reference to base struct.

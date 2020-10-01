@@ -783,7 +783,7 @@ void HLSLAnalyzer::AnalyzeVarDeclStaticMember(VarDecl* varDecl)
         if (auto structTypeDen = typeDen->GetAliased().As<StructTypeDenoter>())
         {
             /* Fetch variable declaration from structure type */
-            if (auto memberVarDecl = FetchVarDeclFromStruct(*structTypeDen, varDecl->ident, varDecl))
+            if (auto memberVarDecl = FetchDeclFromStruct(*structTypeDen, varDecl->ident, varDecl)->As<VarDecl>())
             {
                 /* Is this member variable already defined? */
                 if (auto prevVarDef = memberVarDecl->staticMemberVarRef)
@@ -1300,7 +1300,7 @@ void HLSLAnalyzer::AnalyzeObjectExprVarDeclFromStruct(ObjectExpr* expr, StructDe
     if (baseStructDecl)
     {
         /* Fetch struct member variable declaration from next identifier */
-        expr->symbolRef = FetchVarDeclFromStruct(baseStructDecl, expr->ident, expr);
+        expr->symbolRef = FetchDeclFromStruct(baseStructDecl, expr->ident, expr);
 
         /* Now check, if the referenced symbol can be accessed from the current context */
         if (expr->symbolRef)
@@ -1326,7 +1326,7 @@ void HLSLAnalyzer::AnalyzeObjectExprVarDeclFromStruct(ObjectExpr* expr, StructDe
     else
     {
         /* Fetch struct member variable declaration from next identifier */
-        expr->symbolRef = FetchVarDeclFromStruct(structTypeDen, expr->ident, expr);
+        expr->symbolRef = FetchDeclFromStruct(structTypeDen, expr->ident, expr);
     }
 
     /* Check if struct member and identifier are both static or non-static */
